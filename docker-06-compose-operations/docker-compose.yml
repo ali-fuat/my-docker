@@ -1,0 +1,31 @@
+version: "2"
+services:
+    mongo-db:
+        image: mongo
+        container_name: db
+        restart: always
+        # environment:
+        #     MONGO_INITDB_ROOT_USERNAME: root
+        #     MONGO_INITDB_ROOT_PASSWORD: Clarus123
+        volumes: 
+            - mydata:/data/db
+        networks:
+            - clarusnet
+    myapp:
+        image: clarusways/todo
+        restart: always
+        depends_on:
+            - mongo-db
+        environment:
+            DBHOST: db
+            # MONGO_INITDB_ROOT_USERNAME: root
+            # MONGO_INITDB_ROOT_PASSWORD: Clarus123
+        ports:
+            - "80:3000"
+        networks:
+            - clarusnet
+volumes: 
+    mydata:
+networks:
+    clarusnet:
+        driver: bridge
